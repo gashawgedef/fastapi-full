@@ -28,3 +28,9 @@ async def about():
 @app.get('/blog/{id}/comments')
 async def get_comments(id:int):
     return {"data":{"1","2"}}
+
+
+#This is The example of Blog Request Body
+@app.post('/blog')
+async def create_blog():
+    return {"data":"Blog is created"}
