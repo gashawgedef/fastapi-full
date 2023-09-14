@@ -6,10 +6,15 @@ app=FastAPI()
 async def index():
     return {"Data":"Blog List"}
 
+@app.get('/blog/unpublished')
+async def unpublished():
+    return {"data":"All unpublished blogs"}
 
 @app.get('/blog/{id}')
 async def get_blog(id:int):
     return {"Data":id}
+
+
 
 
 @app.get('/about')
