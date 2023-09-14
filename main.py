@@ -2,9 +2,13 @@ from fastapi import FastAPI
 
 app=FastAPI()
 
-@app.get('/')
-async def index():
-    return {"Data":"Blog List"}
+@app.get('/blog')
+async def index(limit,published:bool):
+    if published:
+     return {"Data":f'{limit} published blogs from the database list'}
+    else:
+        return {"Data":f'{limit}   blogs from the database list'}
+
 
 @app.get('/blog/unpublished')
 async def unpublished():
