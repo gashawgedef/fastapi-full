@@ -4,4 +4,9 @@ app=FastAPI()
 
 @app.get('/')
 async def index():
-    return {"Data":{"name":"Welcome Gashity"}}
+    return {"Data":"Blog List"}
+
+
+@app.get('/about')
+async def about():
+    return {"data":"This is About Page"}
