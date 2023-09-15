@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional
+import uvicorn
 
 app=FastAPI()
 
@@ -41,5 +42,8 @@ async def get_comments(id:int):
 #This is The example of Blog Request Body
 @app.post('/blog')
 async def create_blog(request:Blog):
-    return request
-    return {"data":"Blog is created"}
+    return {"data":f"Blog is created with title as{request.title}"}
+
+
+# if __name__=="__main__":
+#     uvicorn.run(app,host="127.0.0.1",port=9000)
