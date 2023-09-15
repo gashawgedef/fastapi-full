@@ -1,6 +1,14 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import Optional
 
 app=FastAPI()
+
+class Blog(BaseModel):
+    title:str
+    body:str
+    published_at:Optional[bool]
+    
 
 @app.get('/blog')
 async def index(limit,published:bool):
@@ -32,5 +40,6 @@ async def get_comments(id:int):
 
 #This is The example of Blog Request Body
 @app.post('/blog')
-async def create_blog():
+async def create_blog(request:Blog):
+    return request
     return {"data":"Blog is created"}
