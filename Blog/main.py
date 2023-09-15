@@ -37,5 +37,6 @@ def show(id,response:Response,db: Session = Depends(get_db)):
     data=db.query(models.Blog).filter(models.Blog.id==id).first()
     if not data:
         response.status_code=status.HTTP_404_NOT_FOUND
+        return {"detail":f"blog with the id  {id} is not avaialable"}
     return data
 
