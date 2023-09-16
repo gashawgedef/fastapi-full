@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends,status,Response
+from fastapi import FastAPI, Depends,status,Response,HTTPException
 from . import schemas, models
 from .database import engine, SessionLocal
 from sqlalchemy.orm import Session
@@ -36,7 +36,8 @@ def get_all(db: Session = Depends(get_db)):
 def show(id,response:Response,db: Session = Depends(get_db)):
     data=db.query(models.Blog).filter(models.Blog.id==id).first()
     if not data:
-        response.status_code=status.HTTP_404_NOT_FOUND
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"the blog with id {id} is not available")
+        # response.status_code=status.HTTP_404_NOT_FOUND
         return {"detail":f"blog with the id  {id} is not avaialable"}
     return data
 
