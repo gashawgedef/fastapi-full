@@ -75,9 +75,7 @@ def show(id, response: Response, db: Session = Depends(get_db)):
 
 
 pwd_cxt = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-@app.post("/user")
+@app.post("/user",response_model=schemas.ShowUser)
 def create_user(request: schemas.User, db: Session = Depends(get_db)):
     # hashed_password=pwd_cxt.hash(request.password)
     new_user = models.User(
@@ -89,4 +87,15 @@ def create_user(request: schemas.User, db: Session = Depends(get_db)):
     return new_user
 
 
-# hasshing password
+# get a single user
+@app.get('/user/{id}',response_model=schemas.ShowUser)
+def get_user(id:int,db: Session = Depends(get_db)):
+    user=db.query(models.User).filter(models.User.id==id).first()
+    if not user:
+         raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"the user with id {id} is not available",
+        )
+    return user
+
+
