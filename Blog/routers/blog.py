@@ -1,28 +1,32 @@
-from  fastapi import APIRouter,Depends, HTTPException, Response,status,requests
+from fastapi import APIRouter, Depends, HTTPException, Response, status, requests
 from sqlalchemy.orm import Session
-from .. import schemas,database ,models
+from .. import schemas, database, models
 from ..database import get_db
 from typing import List
 
-router=APIRouter()
+router = APIRouter(
+    tags=["blogs"]
+    
+    
+    )
 
 
-@router.post("/blog", status_code=status.HTTP_201_CREATED,tags=['blogs'])
+@router.post("/blog", status_code=status.HTTP_201_CREATED)
 def create(request: schemas.Blog, db: Session = Depends(database.get_db)):
-    new_blog = models.Blog(title=request.title, body=request.body,user_id=1)
+    new_blog = models.Blog(title=request.title, body=request.body, user_id=1)
     db.add(new_blog)
     db.commit()
     db.refresh(new_blog)
     return new_blog
 
 
-@router.get("/blog", response_model=List[schemas.ShowBlog],tags=['blogs'])
+@router.get("/blog", response_model=List[schemas.ShowBlog])
 def get_all(db: Session = Depends(get_db)):
     blogs = db.query(models.Blog).all()
     return blogs
 
 
-@router.delete("/blog/{id}", status_code=status.HTTP_204_NO_CONTENT,tags=['blogs'])
+@router.delete("/blog/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_item(id, db: Session = Depends(get_db)):
     blog = db.query(models.Blog).filter(models.Blog.id == id)
     if not blog.first():
@@ -35,7 +39,7 @@ def delete_item(id, db: Session = Depends(get_db)):
     return blog
 
 
-@router.put("/blog/{id}", status_code=status.HTTP_202_ACCEPTED,tags=['blogs'])
+@router.put("/blog/{id}", status_code=status.HTTP_202_ACCEPTED)
 def update_item(id, request: schemas.Blog, db: Session = Depends(get_db)):
     blog = db.query(models.Blog).filter(models.Blog.id == id)
     if not blog.first():
@@ -48,7 +52,7 @@ def update_item(id, request: schemas.Blog, db: Session = Depends(get_db)):
     return "Updated successfully"
 
 
-@router.get("/blog/{id}", status_code=200, response_model=schemas.ShowBlog,tags=['blogs'])
+@router.get("/blog/{id}", status_code=200, response_model=schemas.ShowBlog)
 def show(id, response: Response, db: Session = Depends(get_db)):
     data = db.query(models.Blog).filter(models.Blog.id == id).first()
     if not data:
