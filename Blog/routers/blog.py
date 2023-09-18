@@ -26,38 +26,16 @@ def get_all(db: Session = Depends(get_db)):
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_item(id, db: Session = Depends(get_db)):
-    blog = db.query(models.Blog).filter(models.Blog.id == id)
-    if not blog.first():
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"blog with the id  {id} is not avaialable",
-        )
-    blog.delete(synchronize_session=False)
-    db.commit()
-    return blog
+   return blog.delete_blog(id,db)
 
 
 @router.put("/{id}", status_code=status.HTTP_202_ACCEPTED)
 def update_item(id, request: schemas.Blog, db: Session = Depends(get_db)):
-    blog = db.query(models.Blog).filter(models.Blog.id == id)
-    if not blog.first():
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"blog with the id  {id} is not avaialable",
-        )
-    blog.update(request.dict())
-    db.commit()
-    return "Updated successfully"
+    return blog.update_blog(id,request,db)
+
 
 
 @router.get("/{id}", status_code=200, response_model=schemas.ShowBlog)
 def show(id, response: Response, db: Session = Depends(get_db)):
-    data = db.query(models.Blog).filter(models.Blog.id == id).first()
-    if not data:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"the blog with id {id} is not available",
-        )
-        # response.status_code=status.HTTP_404_NOT_FOUND
-        return {"detail": f"blog with the id  {id} is not avaialable"}
-    return data
+    return blog.get_single_blog(id,db)
+ 
