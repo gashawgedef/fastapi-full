@@ -42,4 +42,4 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    username: Optional[str] = None
+    emai: Optional[str] = None
