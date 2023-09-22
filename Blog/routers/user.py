@@ -5,7 +5,6 @@ from ..database import get_db
 from ..repository import user
 
 
-
 router = APIRouter(prefix="/user", tags=["users"])
 
 
